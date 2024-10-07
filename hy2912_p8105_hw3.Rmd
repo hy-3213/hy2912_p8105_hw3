@@ -63,4 +63,14 @@ MIMS_comb_df =
 )
 ```
 
+Gender and Education Summary Table 
+```{r}
+gender_ed_df <- MIMS_comb_df |>
+  group_by(education, sex) |>
+  summarise(count = n()) |>
+  pivot_wider(names_from = sex, values_from = count, values_fill = 0)
+```
 
+```{r}
+gender_ed_df
+```
