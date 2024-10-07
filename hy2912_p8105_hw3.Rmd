@@ -48,3 +48,19 @@ MIMS_ac_df =
 names(MIMS_ac_df)
 MIMS_ac_df = janitor::clean_names(MIMS_ac_df)
 ```
+
+Joining data sets to form MIMS_comb_df
+```{r}
+MIMS_comb_df = 
+  left_join (MIMS_dg_df, MIMS_ac_df, by = "seqn") 
+```
+
+```{r}
+MIMS_comb_df = 
+  drop_na(MIMS_comb_df) |>
+  filter ("age" >= 21) |>
+  mutate(across(c(sex, education), as.factor)
+)
+```
+
+
