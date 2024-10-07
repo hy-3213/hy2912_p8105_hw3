@@ -102,5 +102,58 @@ ggplot(total_activity_df, aes(x = age, y = total_activity, color = sex)) +
   labs(x = "Age", y = "Total Activity", title = "Total Activity Against Age, by Gender and Education Level") +
   theme_minimal()
 ```
+24-hour activity by education data set
+```{r}
+total_activity_df |>
+  select(education, total_activity) |> 
+  ggplot(aes(x = total_activity, fill = total_activity, color =sex)) 
+  geom_density(alpha = .5) + 
+  facet_grid(~education) + 
+  viridis::scale_fill_viridis(discrete = TRUE)
+```
+# Problem 3
+#### Citi Bike Data 
+
+Loading data sets 
+```{r}
+Jan2020_df = read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/Jan2020.CITI.csv", na = c(".", "NA", ""))
+Jul2020_df = read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/July2020.CITI.csv", na = c(".", "NA", ""))
+Jan2024_df = read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/Jan2024.CITI.csv", na = c(".", "NA", ""))
+Jul2024_df = read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/July2024.CITI.csv", na = c(".", "NA", ""))
+```
+
+Basic cleaning of data sets
+```{r}
+Jan2020_df = 
+  janitor::clean_names (Jan2020_df)
+```
+```{r}
+Jan2020_df = drop_na(Jan2020_df)
+```
+```{r}
+Jul2020_df = janitor::clean_names (Jul2020_df)
+```
+```{r}
+Jul2020_df = drop_na(Jul2020_df)
+```
+```{r}
+Jan2024_df = janitor::clean_names (Jan2024_df)
+```
+```{r}
+Jan2024_df = drop_na(Jan2024_df)
+```
+```{r}
+Jul2024_df = janitor::clean_names (Jul2024_df)
+```
+```{r}
+Jul2024_df = drop_na(Jul2024_df)
+```
 
 
+
+```{r}
+Jan2020_df = 
+  col_types = cols(
+      member_casual = col_character() 
+  )
+```
