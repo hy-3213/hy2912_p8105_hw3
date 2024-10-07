@@ -84,3 +84,23 @@ ggplot(MIMS_comb_df, aes(x = age, fill = sex)) +
        y = "Count") +
   theme_minimal()
 ```
+Total activity dataset 
+```{r}
+total_activity_df <- MIMS_comb_df |>
+  group_by(seqn, age, sex, education) |>
+  summarise(total_activity = sum(min1:min1440, na.rm = TRUE)) 
+```
+```{r}
+total_activity_df
+```
+Plot of total activities against age, by sex and education
+```{r}
+ggplot(total_activity_df, aes(x = age, y = total_activity, color = sex)) +
+  geom_point() +
+  geom_smooth(method = "loess") +
+  facet_wrap(~ education) +
+  labs(x = "Age", y = "Total Activity", title = "Total Activity Against Age, by Gender and Education Level") +
+  theme_minimal()
+```
+
+
