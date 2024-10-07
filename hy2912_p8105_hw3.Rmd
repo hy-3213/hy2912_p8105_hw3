@@ -74,3 +74,13 @@ gender_ed_df <- MIMS_comb_df |>
 ```{r}
 gender_ed_df
 ```
+Visualization of the Age-Sex Distribution by Education Level
+```{r}
+ggplot(MIMS_comb_df, aes(x = age, fill = sex)) +
+  geom_histogram(position = "dodge", binwidth = 10, alpha = 0.5) +
+  facet_wrap(~ education) +
+  labs(title = "Age-Sex Distribution By Education Level",
+       x = "Age (years)",
+       y = "Count") +
+  theme_minimal()
+```
