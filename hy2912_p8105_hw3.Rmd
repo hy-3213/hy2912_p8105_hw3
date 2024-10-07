@@ -1,0 +1,50 @@
+---
+title: "hy2912_p8105_hw3"
+author: "Helen Yousaf"
+date: "2024-10-07"
+output: github_document
+---
+```{r}
+library(readr)
+library(tidyverse)
+library(ggridges)
+```
+
+# Problem 2 
+#### MIMS Data
+
+Importing MIMS Demographic data
+```{r}
+MIMS_dg_df = 
+  read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/MIMS.dg.csv", 
+           skip = 4, na = c(".", "NA", ""), 
+    col_types = cols(
+      'SEQN' = col_character(),
+      `sex` = col_character(),
+      `age` = col_integer(),
+      `BMI` = col_double(),
+      `education` = col_character(),
+    )
+  )
+```
+
+```{r}
+names(MIMS_dg_df)
+MIMS_dg_df = janitor::clean_names(MIMS_dg_df)
+```
+
+Importing MIMS Accelerometer data 
+```{r}
+MIMS_ac_df = 
+  read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/MIMS.ac.csv", 
+           na = c(".", "NA", ""), 
+     col_types = cols(
+      'SEQN' = col_character(),
+    )
+  )       
+```
+
+```{r}
+names(MIMS_ac_df)
+MIMS_ac_df = janitor::clean_names(MIMS_ac_df)
+```
