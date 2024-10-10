@@ -8,6 +8,7 @@ output: github_document
 library(readr)
 library(tidyverse)
 library(ggridges)
+library(dplyr)
 ```
 
 # Problem 2 
@@ -102,15 +103,6 @@ ggplot(total_activity_df, aes(x = age, y = total_activity, color = sex)) +
   labs(x = "Age", y = "Total Activity", title = "Total Activity Against Age, by Gender and Education Level") +
   theme_minimal()
 ```
-24-hour activity by education data set
-```{r}
-total_activity_df |>
-  select(education, total_activity) |> 
-  ggplot(aes(x = total_activity, fill = total_activity, color =sex)) 
-  geom_density(alpha = .5) + 
-  facet_grid(~education) + 
-  viridis::scale_fill_viridis(discrete = TRUE)
-```
 # Problem 3
 #### Citi Bike Data 
 
@@ -128,32 +120,150 @@ Jan2020_df =
   janitor::clean_names (Jan2020_df)
 ```
 ```{r}
-Jan2020_df = drop_na(Jan2020_df)
+Jan2020_df = 
+  drop_na(Jan2020_df) |>
+  mutate (date = "Jan 2020")
 ```
 ```{r}
 Jul2020_df = janitor::clean_names (Jul2020_df)
 ```
 ```{r}
-Jul2020_df = drop_na(Jul2020_df)
+Jul2020_df = 
+  drop_na(Jul2020_df)|>
+  mutate (date = "July 2020")
 ```
 ```{r}
-Jan2024_df = janitor::clean_names (Jan2024_df)
+Jan2024_df = janitor::clean_names (Jan2024_df) 
 ```
 ```{r}
-Jan2024_df = drop_na(Jan2024_df)
+Jan2024_df = 
+  drop_na(Jan2024_df) |>
+  mutate (date = "Jan 2024")
 ```
 ```{r}
 Jul2024_df = janitor::clean_names (Jul2024_df)
 ```
 ```{r}
-Jul2024_df = drop_na(Jul2024_df)
+Jul2024_df = 
+  drop_na(Jul2024_df) |> 
+  mutate (date = "July 2024")
 ```
-
-
+Binding rows to recreate one data set for Citi Bike data
+```{r}
+citi_df = 
+  bind_rows (Jan2020_df, Jul2020_df, Jan2024_df, Jul2024_df) |>
+  rename (id = ride_id, bike= rideable_type, day = weekdays, start_station = start_station_name, end_station = end_station_name, 
+  rider = member_casual) 
+```
+```{r}
+citi_df |>
+   mutate(
+    bike = 
+      case_match(
+        bike, 
+        "electric_bike" ~ "electric", 
+        "classic_bike" ~ "classic")
+   )
+```
 
 ```{r}
-Jan2020_df = 
-  col_types = cols(
-      member_casual = col_character() 
-  )
+total_rider_df <- citi_df |>
+  group_by(rider, date) |>
+  summarise(count = n()) |>
+  pivot_wider(names_from = rider, values_from = count, values_fill = 0)
 ```
+```{r}
+total_rider_df
+```
+```{r}
+pop_start_df <- citi_df |>
+  group_by (date = "July 2024") |>
+  summarise(count = n()) |>
+  pivot_wider(names_from = date, values_from = count, values_fill = 0)
+```
+
+July 2024 data set
+```{r}
+Jul_2024_df <- citi_df |>
+  filter(date == "July 2024")
+```
+
+Popular Stations data set
+```{r}
+pop_start_df <- Jul_2024_df |> 
+  group_by(start_station) |>
+  summarise(ride_count = n()) |>
+  arrange(desc(ride_count))
+```
+
+5 Most Popular Starting Stations 
+```{r}
+five_pop_start_df <- head(pop_start_df, 5)
+```
+
+```{r}
+five_pop_start_df
+```
+```{r}
+median_df <- citi_df |>
+separate (date, c("month", "year"))
+```
+
+Calculating median ride duration per date variable factor 
+```{r}
+day_median_df <- median_df |>
+  group_by(day)|>
+  summarise(day_median_duration = median(duration))
+```
+
+```{r}
+month_median_df <- median_df |>
+  group_by(month)|>
+  summarize(month_median_duration = median(duration))
+```
+
+```{r}
+year_median_df <- median_df |>
+  group_by(year)|>
+  summarize(year_median_duration = median(duration))
+```
+
+Creating individual plots 
+```{r}
+day_plot <- ggplot(day_median_df, aes(x = day, y = day_median_duration)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Median Ride Duration by Day of the Week",
+       x = "Day of the Week",
+       y = "Median Ride Duration (minutes)") +
+  theme_minimal()
+```
+```{r}
+month_plot <- ggplot(month_median_df, aes(x = month, y = month_median_duration)) +
+  geom_bar(stat = "identity", fill = "green") +
+  labs(title = "Median Ride Duration by Month",
+       x = "Month",
+       y = "Median Ride Duration (minutes)") +
+  theme_minimal()
+```
+
+```{r}
+year_plot <- ggplot(year_median_df, aes(x = year , y = year_median_duration)) +
+  geom_bar(stat = "identity", fill = "pink") +
+  labs(title = "Median Ride Duration by Month",
+       x = "Year",
+       y = "Median Ride Duration (minutes)") +
+  theme_minimal()
+```
+
+```{r}
+library(patchwork)
+```
+
+```{r}
+(day_plot + month_plot) / year_plot
+```
+
+
+
+
+
