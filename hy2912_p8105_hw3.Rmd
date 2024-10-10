@@ -212,6 +212,7 @@ five_pop_start_df <- head(pop_start_df, 5)
 ```{r}
 five_pop_start_df
 ```
+
 ```{r}
 median_df <- citi_df |>
 separate (date, c("month", "year"))
@@ -270,12 +271,41 @@ library(patchwork)
 ```{r}
 (day_plot + month_plot) / year_plot
 ```
-Impact of month, membership status, and bike type on the distribution of ride duration in 2024 
+
 ```{r}
-range_duration_df <- citi_df |>
-  
+month_ride_distribution <- ggplot(median_df, aes(x = duration)) +
+  geom_histogram (binwidth = 1, fill = "blue", color = "black") +
+  facet_wrap(~ month) +
+  labs(title = "Distribution of Ride Duration by Month", x = "Ride Duration", y = "Count")
+```
+
+```{r}
+month_ride_distribution
 ```
 
 
+```{r}
+membership_ride_distribution <- ggplot(citi_df, aes(x = duration)) +
+  geom_histogram (binwidth = 1, fill = "pink", color = "blue") +
+  facet_wrap(~ rider) +
+  labs(title = "Distribution of Ride Duration by Membership Status", x = "Ride Duration", y = "Count")
+```
+
+```{r}
+membership_ride_distribution
+```
+
+```{r}
+bike_ride_distribution <- ggplot(citi_df, aes(x = duration, fill = bike)) +
+  geom_histogram(binwidth = 1, position = "dodge", color = "yellow") +
+  labs(title = "Distribution of Ride Duration by Bike Type", x = "Ride Duration", y = "Count")
+```
+
+```{r}
+bike_ride_distribution
+```
+
+
+  
 
 
