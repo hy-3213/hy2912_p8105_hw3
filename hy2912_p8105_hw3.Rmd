@@ -18,31 +18,39 @@ Importing MIMS Demographic data
 ```{r}
 MIMS_dg_df = 
   read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/MIMS.dg.csv", 
-           skip = 4, na = c(".", "NA", ""), 
-    col_types = cols(
-      'SEQN' = col_character(),
-      `sex` = col_character(),
-      `age` = col_integer(),
-      `BMI` = col_double(),
-      `education` = col_character(),
-    )
-  )
+           skip = 4, na = c(".", "NA", ""))
 ```
 
 ```{r}
 names(MIMS_dg_df)
-MIMS_dg_df = janitor::clean_names(MIMS_dg_df)
+MIMS_dg_df = janitor::clean_names(MIMS_dg_df) |>
+  mutate(
+    sex = 
+      case_match(
+        sex, 
+        1 ~ "male", 
+        2 ~ "female"),
+    sex = as.factor(sex)) 
+```
+
+```{r}
+MIMS_dg_df |>
+  mutate(
+    education = 
+      case_match (
+        education, 
+        1 ~ "less than hs", 
+        2 ~ "hs equivalent",
+        3 ~ "greater than hs"),
+    education = as.factor(education))
+```
 ```
 
 Importing MIMS Accelerometer data 
 ```{r}
 MIMS_ac_df = 
   read_csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/MIMS.ac.csv", 
-           na = c(".", "NA", ""), 
-     col_types = cols(
-      'SEQN' = col_character(),
-    )
-  )       
+           na = c(".", "NA", ""))
 ```
 
 ```{r}
@@ -262,7 +270,11 @@ library(patchwork)
 ```{r}
 (day_plot + month_plot) / year_plot
 ```
-
+Impact of month, membership status, and bike type on the distribution of ride duration in 2024 
+```{r}
+range_duration_df <- citi_df |>
+  
+```
 
 
 
