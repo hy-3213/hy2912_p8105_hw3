@@ -35,6 +35,14 @@ ny_noaa =
                 tmin = as.numeric(tmin))
 ```
 
+Plot for average maximum temperature 
+```{r}
+ny_noaa |>
+  group_by(id, year, month)|>
+  summarise(mean_tmax = mean(tmax, na.rm = TRUE, color = id))|>
+  ggplot(aes(x=year, y=mean_tmax, group=id))+geom_point()+geom_path()+facet_grid(~month)+labs(title = "Mean Monthly Temperature by Station Across Years in January and July")
+```
+
 # Problem 2 
 #### MIMS Data
 
