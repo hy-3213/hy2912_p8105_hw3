@@ -9,7 +9,6 @@ library(readr)
 library(tidyverse)
 library(ggridges)
 library(dplyr)
-library(hexbin)
 ```
 # Problem 1 
 #### NOAA Data 
@@ -174,7 +173,7 @@ Overall, males tended to have a higher total activity count across all education
 
 ```{r}
 activity_timecourse_df <- MIMS_comb_df |>
-group_by (min1:min1440, education, sex) |>
+group_by (education, sex) |>
 summarise (mean_activity = mean(duration), .groups = 'drop')
 ```
 
@@ -182,6 +181,17 @@ summarise (mean_activity = mean(duration), .groups = 'drop')
 library(ggplot2)
 ```
 
+```{r}
+ggplot(MIMS_comb_df, aes(x=education, y=, color=sex))+
+  geom_line()+
+  facet_wrap(~ education, ncol = 1) +
+  labs(x = "Time of Day", y = "Activity Level", title = "24-Hour Activity Time Courses by Education Level and Sex") +
+  theme_minimal() +
+  scale_color_manual(values = c("blue", "pink"))
+```
+
+
+  
 
 # Problem 3
 #### Citi Bike Data 
