@@ -60,6 +60,11 @@ hex
 ```{r}
 ridge
 ```
+The original data set is organized within 7 columns and 2595176 rows. The variables included in the set related to the weather station id, snowfall (reported in mm), date o observation, snow depth(reported in mm), and the minimum and maximum temperature. The data was cleaned by removed rows without information or NA. The date variables was separated to report the date within separate columns for the day, month, and year. The snowfall variable was mostly reported as 0 or NA, indicating there is no data available or because it does not snow for the majority of the year. 
+
+The two-panel plot created for the average maximum temperature in January and in July in each station across years. The mean temperature in January was much lower than the mean temperature in July. This results was not unexpected, given the difference in summer and winter seasons. The stations depict a similar pattern of temperature peaks and valleys within a month across all of the years. One outlier in the set is a very cold station in July 19875/1988. 
+
+The two-panel plot also includes a hex plot of the tmax vs the tmin. This hex plot shows that there is variability  but overall the majority of the data cluster in the center of the distributions. The ridge plot reveals multimodal density depiction of the snowfall within the year. Most stations have been zero and 35 mm of snow per year. A second and third group of stations about about 45 mm and 80 mm snow, respectively. 
 
 # Problem 2 
 #### MIMS Data
@@ -180,18 +185,6 @@ summarise (mean_activity = mean(duration), .groups = 'drop')
 ```{r}
 library(ggplot2)
 ```
-
-```{r}
-ggplot(MIMS_comb_df, aes(x=education, y=, color=sex))+
-  geom_line()+
-  facet_wrap(~ education, ncol = 1) +
-  labs(x = "Time of Day", y = "Activity Level", title = "24-Hour Activity Time Courses by Education Level and Sex") +
-  theme_minimal() +
-  scale_color_manual(values = c("blue", "pink"))
-```
-
-
-  
 
 # Problem 3
 #### Citi Bike Data 
