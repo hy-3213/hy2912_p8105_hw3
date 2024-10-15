@@ -10,6 +10,30 @@ library(tidyverse)
 library(ggridges)
 library(dplyr)
 ```
+# Problem 1 
+#### NOAA Data 
+
+Reading the data 
+
+```{r}
+ny_noaa = read.csv(file = "/Users/helenyousaf/Desktop/hy2912_p8105_hw3/nynoaadat.csv", na = c(".", "NA", ""))
+```
+
+```{r}
+ny_noaa |>
+  count(snow)|>
+  arrange(desc(n))
+```
+
+Data set cleaning 
+```{r}
+ny_noaa = 
+  ny_noaa |>
+  separate (date, into = c("year", "month", "day"), convert = TRUE) |>
+              mutate(
+                tmax = as.numeric(tmax), 
+                tmin = as.numeric(tmin))
+```
 
 # Problem 2 
 #### MIMS Data
@@ -301,7 +325,7 @@ library(patchwork)
 ```{r}
 (day_plot + month_plot) / year_plot
 ```
-The greatest impact on ride duration appears to be caused by the month of ride (January vs July). This is expected as the difference in temperatures, is likely to incline riders to ride for a longer period of time in July as compared to January. The second most effect was caused by the year of the rides (2020 vs 2024). Given the pandemic, stay-at-home orders, and lockdowns, it is clear that people had more free time and were able to ride their bikes for longer in 2020 as compared to in 2024. The day of the week had the weakest impact on ride duration, however, there were still slight ncreases in duration on weekends as compared to weekdays. 
+The greatest impact on ride duration appears to be caused by the month of ride (January vs July). This is expected as the difference in temperatures, is likely to incline riders to ride for a longer period of time in July as compared to January. The second most effect was caused by the year of the rides (2020 vs 2024). Given the pandemic, stay-at-home orders, and lockdowns, it is clear that people had more free time and were able to ride their bikes for longer in 2020 as compared to in 2024. The day of the week had the weakest impact on ride duration, however, there were still slight increases in duration on weekends as compared to weekdays. 
 
 ```{r}
 month_ride_distribution <- ggplot(median_df, aes(x = duration)) +
@@ -327,6 +351,6 @@ bike_ride_distribution <- ggplot(citi_df, aes(x = duration, fill = bike)) +
 ```{r}
 (month_ride_distribution + membership_ride_distribution) / bike_ride_distribution
 ```
-The membership tpye appears to have the great impact on ride duration as displayed by the visualization. This was followed by month and bike type. 
+The membership type appears to have the great impact on ride duration as displayed by the visualization. This was followed by month and bike type. 
 
 
